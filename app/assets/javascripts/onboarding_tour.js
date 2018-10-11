@@ -14,14 +14,12 @@
                 'showSkip' : false
             },
             {
-                "description" : I18n.t('js.onboarding.steps.project_selection'),
+                'description' : I18n.t('js.onboarding.steps.project_selection'),
                 'selector' : '.widget-box.projects .widget-box--arrow-links',
                 'event' : 'click',
                 'showSkip' : false,
                 'containerClass' : '-dark',
-                onBeforeStart: function () {
-                    $('.enjoyhint').toggleClass('-clickable', true);
-                }
+                'clickable' : true
             }
         ];
 
@@ -48,28 +46,62 @@
                 'showSkip' : false,
                 'shape' : 'circle',
                 'radius' : 20,
-                onBeforeStart: function () {
-                    $('.enjoyhint').toggleClass('-clickable', true);
-                }
+                'clickable' : true
             },
             {
                 "click .wp-query-menu--item[data-category='default']": I18n.t('js.onboarding.steps.wp_query'),
                 'showSkip' : false,
                 'timeout' : 200,
                 'margin' : 0,
-                onBeforeStart: function () {
-                    $('.enjoyhint').toggleClass('-clickable', true);
-                }
+                'clickable' : true
             }
         ];
 
+        var scrumOverviewOnboardingTourSteps = [
+            {
+                'next #content' : I18n.t('js.onboarding.steps.project_overview'),
+                'showSkip' : false,
+                'containerClass' : '-dark'
+            },
+            {
+                'next #menu-sidebar' : I18n.t('js.onboarding.steps.sidebar'),
+                'showSkip' : false
+            },
+            {
+                'next .settings-menu-item' : I18n.t('js.onboarding.steps.settings'),
+                'showSkip' : false
+            },
+            {
+                'next .members-menu-item' : I18n.t('js.onboarding.steps.members'),
+                'showSkip' : false
+            },
+            {
+                'next .backlogs-menu-item' : I18n.t('js.onboarding.steps.backlogs'),
+                'showSkip' : false
+            },
+            {
+                'click .toggler' : I18n.t('js.onboarding.steps.wp_toggler'),
+                'showSkip' : false,
+                'shape' : 'circle',
+                'radius' : 20,
+                'clickable' : true
+            },
+            {
+                "click .wp-query-menu--item[data-category='default']": I18n.t('js.onboarding.steps.wp_query'),
+                'showSkip' : false,
+                'timeout' : 200,
+                'margin' : 0,
+                'clickable' : true
+            }
+        ];
+        
         var wpOnboardingTourSteps = [
             {
                 'custom .wp-table--row' : I18n.t('js.onboarding.steps.wp_list'),
                 'showSkip' : false,
                 'margin' : 5,
+                'clickable' : true,
                 onBeforeStart: function(){
-                    $('.enjoyhint').toggleClass('-clickable', true);
                     // Handle next step
                     $('.wp-table--row').dblclick(function() {
                         tutorialInstance.trigger('next');
@@ -90,9 +122,7 @@
             {
                 'click .work-packages-list-view-button' : I18n.t('js.onboarding.steps.wp_back_button'),
                 'showSkip' : false,
-                onBeforeStart: function () {
-                    $('.enjoyhint').toggleClass('-clickable', true);
-                }
+                'clickable' : true
             },
             {
                 'next .add-work-package' : I18n.t('js.onboarding.steps.wp_create_button'),
@@ -103,9 +133,7 @@
                 'click .timeline-toolbar--button' : I18n.t('js.onboarding.steps.wp_timeline_button'),
                 'showSkip' : false,
                 'shape' : 'circle',
-                onBeforeStart: function () {
-                    $('.enjoyhint').toggleClass('-clickable', true);
-                }
+                'clickable' : true
             },
             {
                 'next .work-packages-tabletimeline--timeline-side' : I18n.t('js.onboarding.steps.wp_timeline'),
@@ -115,7 +143,7 @@
             {
                 'next .menu-item--help' : I18n.t('js.onboarding.steps.help_menu'),
                 'shape' : 'circle',
-                "nextButton" : {text: "Got it"},
+                "nextButton" : {text: I18n.t('js.onboarding.steps.got_it')},
                 'showSkip' : false
             }
         ];
@@ -123,6 +151,7 @@
         // Start after the intro modal (language selection)
         // This has to be changed once the project selection is implemented
         if(url.searchParams.get("first_time_user")) {
+            currentTourPart = '';
             sessionStorage.setItem(storageKey, 'readyToStart');
 
             // Start automatically when the language selection is closed
@@ -138,7 +167,12 @@
 
         // ------------------------------- Tutorial Overview page -------------------------------
         if (currentTourPart === "homescreenFinished") {
-            startTour(overviewOnboardingTourSteps, 'overviewFinished');
+            if($('.backlogs-menu-item').length > 0) {
+                startTour(scrumOverviewOnboardingTourSteps, 'overviewFinished');
+            } else {
+                startTour(overviewOnboardingTourSteps, 'overviewFinished');
+            }
+
         };
 
         // ------------------------------- Tutorial WP page -------------------------------

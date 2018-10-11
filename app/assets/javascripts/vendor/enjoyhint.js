@@ -102,6 +102,7 @@ var EnjoyHint;
             // Remove all classes
             $enjoyhint.removeClass();
             $enjoyhint.addClass("enjoyhint enjoyhint-step-" + (current_step + 1));
+            if (step_data.clickable) $enjoyhint.addClass('-clickable');
             if (step_data.containerClass) $enjoyhint.addClass(step_data.containerClass);
 
 
